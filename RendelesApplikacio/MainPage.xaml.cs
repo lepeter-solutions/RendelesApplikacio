@@ -1,8 +1,11 @@
-﻿using System;
+﻿using RendelesApplikacio;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace OrderManagementApp
 {
@@ -13,23 +16,21 @@ namespace OrderManagementApp
         public MainPage()
         {
             InitializeComponent();
-            Loaded += MainPage_Loaded; // Attach the Loaded event
+            Loaded += MainPage_Loaded;
         }
 
         private void MainPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            LoadOrders(); // Refresh the orders when the page is loaded
+            LoadOrders(); 
         }
 
+     
         private void LoadOrders()
         {
-            // Clear the existing items in the OrdersList
             OrdersList.Children.Clear();
 
-            // Check if the orders.json file exists
             if (!File.Exists(OrdersFilePath))
             {
-                // If no file exists, display a message
                 var noOrdersMessage = new TextBlock
                 {
                     Text = "No orders found. Add some orders to get started!",
@@ -42,7 +43,6 @@ namespace OrderManagementApp
 
             try
             {
-                // Read and deserialize the orders from the JSON file
                 var ordersJson = File.ReadAllText(OrdersFilePath);
                 var orders = JsonSerializer.Deserialize<List<Order>>(ordersJson);
 
@@ -58,10 +58,8 @@ namespace OrderManagementApp
                     return;
                 }
 
-                // Dynamically add each order to the OrdersList
                 foreach (var order in orders)
                 {
-                    // Create a Border for each order
                     var orderBorder = new Border
                     {
                         BorderBrush = System.Windows.Media.Brushes.Gray,
@@ -72,10 +70,8 @@ namespace OrderManagementApp
                         Background = System.Windows.Media.Brushes.LightGray
                     };
 
-                    // Create a StackPanel to hold the order details
                     var orderPanel = new StackPanel();
 
-                    // Add the customer's name
                     var customerNameText = new TextBlock
                     {
                         Text = $"Customer: {order.CustomerName}",
@@ -84,7 +80,6 @@ namespace OrderManagementApp
                     };
                     orderPanel.Children.Add(customerNameText);
 
-                    // Add the ordered item
                     var orderedItemText = new TextBlock
                     {
                         Text = $"Item: {order.OrderedItem}",
@@ -92,25 +87,23 @@ namespace OrderManagementApp
                     };
                     orderPanel.Children.Add(orderedItemText);
 
-                    // Add the order status
                     var orderStatusText = new TextBlock
                     {
                         Text = $"Status: {order.OrderStatus}",
                         FontSize = 12,
-                        Foreground = order.OrderStatus == "Pending"
-                            ? System.Windows.Media.Brushes.Orange
-                            : order.OrderStatus == "Shipped"
-                                ? System.Windows.Media.Brushes.Blue
-                                : order.OrderStatus == "Delivered"
-                                    ? System.Windows.Media.Brushes.Green
-                                    : System.Windows.Media.Brushes.Red
+                        Foreground = order.OrderStatus switch
+                        {
+                            "Pending" => Brushes.Orange,
+                            "In Progress" => Brushes.Blue,
+                            "Delivered" => Brushes.Green,
+                            "Canceled" => Brushes.Red,
+                            _ => Brushes.Black 
+                        }
                     };
                     orderPanel.Children.Add(orderStatusText);
 
-                    // Add the StackPanel to the Border
                     orderBorder.Child = orderPanel;
 
-                    // Add the Border to the OrdersList
                     OrdersList.Children.Add(orderBorder);
                 }
             }
@@ -130,6 +123,12 @@ namespace OrderManagementApp
         {
             // Navigate to the AddOrderPage
             NavigationService.Navigate(new AddOrderPage());
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ManageOrdersPage());
+
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     public class Order
     {
+        public Guid OrderId { get; set; } = Guid.NewGuid(); 
+
         public string CustomerName { get; set; }
         public string OrderAddress { get; set; }
         public string OrderedItem { get; set; }

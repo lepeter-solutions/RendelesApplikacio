@@ -9,7 +9,6 @@ namespace OrderManagementApp
         {
             InitializeComponent();
 
-            // Load the MainPage into the Frame when the application starts
             MainFrame.Navigate(new MainPage());
         }
     }

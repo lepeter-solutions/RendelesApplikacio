@@ -1,0 +1,65 @@
+﻿<Page x:Class="RendelesApplikacio.ManageOrdersPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RendelesApplikacio"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Manage Orders">
+
+    <Grid Margin="10">
+        <StackPanel>
+            <Button Content="Back" 
+                    Margin="0,0,0,10" 
+                    Background="Gray" 
+                    Foreground="White" 
+                    Padding="10,5" 
+                    FontWeight="Bold" 
+                    HorizontalAlignment="Left" 
+                    Click="BackButton_Click" />
+
+            <TextBlock Text="Manage Orders" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
+
+            <Button Content="Refresh Orders" Margin="0,5" Click="RefreshOrders_Click" />
+
+            <Button Content="Delete All Orders" Margin="0,5" Background="Red" Foreground="White" Click="DeleteAllOrders_Click" />
+
+            <ListBox x:Name="OrdersList" Margin="0,10" Height="200" MouseDoubleClick="OrdersList_MouseDoubleClick" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <Button Content="Cancel" 
+                        Margin="5" 
+                        Background="Red" 
+                        Foreground="White" 
+                        Padding="10,5" 
+                        FontWeight="Bold" 
+                        Click="SetStatusToCanceled_Click" />
+
+                <Button Content="In Progress" 
+                        Margin="5" 
+                        Background="Blue" 
+                        Foreground="White" 
+                        Padding="10,5" 
+                        FontWeight="Bold" 
+                        Click="SetStatusToInProgress_Click" />
+
+                <Button Content="Delivered" 
+                        Margin="5" 
+                        Background="Green" 
+                        Foreground="White" 
+                        Padding="10,5" 
+                        FontWeight="Bold" 
+                        Click="SetStatusToDelivered_Click" />
+
+                <Button Content="Delete Order" 
+                        Margin="5" 
+                        Background="DarkRed" 
+                        Foreground="White" 
+                        Padding="10,5" 
+                        FontWeight="Bold" 
+                        Click="DeleteOrder_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

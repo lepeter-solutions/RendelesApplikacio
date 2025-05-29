@@ -3,19 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="MainPage">
     <Grid>
-        <!-- Scrollable area for displaying orders -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="10,10,10,60">
             <StackPanel Name="OrdersList">
-                <!-- Orders will be dynamically added here -->
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Buttons for managing and adding orders/customers -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
-            <Button Content="Manage Orders" Width="120" Margin="5"/>
+            <Button Content="Manage Orders" Width="120" Margin="5" Click="Button_Click"/>
             <Button Content="Add Orders" Width="120" Margin="5" Click="AddOrders_Click"/>
-            <Button Content="Manage Customers" Width="120" Margin="5"/>
-            <Button Content="Add Customers" Width="120" Margin="5"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,0 +1,48 @@
+﻿<Page x:Class="RendelesApplikacio.OrderEditorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Order Editor">
+    <Grid Margin="10">
+        <StackPanel>
+            <Button Content="Back" 
+                    Margin="0,0,0,10" 
+                    Background="Gray" 
+                    Foreground="White" 
+                    Padding="10,5" 
+                    FontWeight="Bold" 
+                    HorizontalAlignment="Left" 
+                    Click="BackButton_Click" />
+
+            <TextBlock Text="Edit Order" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
+
+            <TextBlock Text="Customer Name:" Margin="0,5" />
+            <TextBox x:Name="CustomerNameTextBox" Margin="0,5" />
+
+            <TextBlock Text="Ordered Item:" Margin="0,5" />
+            <TextBox x:Name="OrderedItemTextBox" Margin="0,5" />
+
+            <TextBlock Text="Order Address:" Margin="0,5" />
+            <TextBox x:Name="OrderAddressTextBox" Margin="0,5" />
+
+            <TextBlock Text="Amount:" Margin="0,5" />
+            <TextBox x:Name="AmountTextBox" Margin="0,5" />
+
+            <TextBlock Text="Order Status:" Margin="0,5" />
+            <ComboBox x:Name="OrderStatusComboBox" Margin="0,5">
+                <ComboBoxItem Content="Pending" />
+                <ComboBoxItem Content="In Progress" />
+                <ComboBoxItem Content="Delivered" />
+                <ComboBoxItem Content="Canceled" />
+            </ComboBox>
+
+            <Button Content="Save Changes" 
+                    Margin="0,10,0,0" 
+                    Background="Green" 
+                    Foreground="White" 
+                    Padding="10,5" 
+                    FontWeight="Bold" 
+                    HorizontalAlignment="Left" 
+                    Click="SaveChanges_Click" />
+        </StackPanel>
+    </Grid>
+</Page>

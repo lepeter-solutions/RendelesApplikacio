@@ -4,11 +4,12 @@
       Title="AddOrderPage">
     <Grid Margin="10">
         <StackPanel>
-            <!-- Back Button -->
             <Button Content="Back" Margin="5" Width="100" HorizontalAlignment="Left" Click="BackButton_Click"/>
 
-            <TextBlock Text="Select Customer:" Margin="5"/>
-            <ComboBox Name="CustomerList" Margin="5" Width="200" />
+            <TextBlock Text="Add New Order" FontSize="24" FontWeight="Bold" Margin="5" HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Customer Name:" Margin="5"/>
+            <TextBox Name="CustomerName" Margin="5" Width="300" />
 
             <TextBlock Text="Order Address:" Margin="5"/>
             <TextBox Name="OrderAddress" Margin="5" Width="300" />
@@ -22,15 +23,14 @@
             <TextBlock Text="Order Date:" Margin="5"/>
             <DatePicker Name="OrderDate" Margin="5" Width="200" />
 
-            <TextBlock Text="Order Status:" Margin="5"/>
-            <ComboBox Name="OrderStatus" Margin="5" Width="200">
-                <ComboBoxItem Content="Pending" />
-                <ComboBoxItem Content="Shipped" />
-                <ComboBoxItem Content="Delivered" />
-                <ComboBoxItem Content="Canceled" />
-            </ComboBox>
-
+          
             <Button Content="Submit Order" Margin="5" Width="150" HorizontalAlignment="Left" Click="SubmitOrder_Click"/>
+
+          
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                <Button Content="Export JSON" Margin="5" Width="150" Click="ExportJson_Click"/>
+                <Button Content="Import JSON" Margin="5" Width="150" Click="ImportJson_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

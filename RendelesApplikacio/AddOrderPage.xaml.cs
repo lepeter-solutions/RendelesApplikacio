@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32; 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -14,15 +15,10 @@ namespace OrderManagementApp
         public AddOrderPage()
         {
             InitializeComponent();
-            // Populate CustomerList with sample data
-            CustomerList.Items.Add("Customer 1");
-            CustomerList.Items.Add("Customer 2");
-            CustomerList.Items.Add("Customer 3");
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate back to the previous page
             if (NavigationService.CanGoBack)
             {
                 NavigationService.GoBack();
@@ -31,8 +27,11 @@ namespace OrderManagementApp
 
         private void SubmitOrder_Click(object sender, RoutedEventArgs e)
         {
-            // Create an Order object from the form inputs
-            if (CustomerList.SelectedItem == null || string.IsNullOrWhiteSpace(OrderedItem.Text) || string.IsNullOrWhiteSpace(OrderAddress.Text) || string.IsNullOrWhiteSpace(Amount.Text) || OrderDate.SelectedDate == null || OrderStatus.SelectedItem == null)
+            if (string.IsNullOrWhiteSpace(CustomerName.Text) ||
+                string.IsNullOrWhiteSpace(OrderedItem.Text) ||
+                string.IsNullOrWhiteSpace(OrderAddress.Text) ||
+                string.IsNullOrWhiteSpace(Amount.Text) ||
+                OrderDate.SelectedDate == null)
             {
                 MessageBox.Show("Please fill in all fields before submitting the order.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -42,21 +41,18 @@ namespace OrderManagementApp
             {
                 var order = new Order
                 {
-                    CustomerName = CustomerList.SelectedItem.ToString(),
+                    CustomerName = CustomerName.Text,
                     OrderAddress = OrderAddress.Text,
                     OrderedItem = OrderedItem.Text,
                     Amount = int.Parse(Amount.Text),
-                    OrderStatus = (OrderStatus.SelectedItem as ComboBoxItem)?.Content.ToString(),
+                    OrderStatus = "Pending",
                     OrderDate = OrderDate.SelectedDate.Value
                 };
 
-                // Save the order to a JSON file
                 SaveOrderToJson(order);
 
-                // Display success message
                 MessageBox.Show($"Order Created and Saved:\n{order}", "Order Submitted", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Clear the form after submission
                 ClearForm();
             }
             catch (Exception ex)
@@ -69,7 +65,6 @@ namespace OrderManagementApp
         {
             List<Order> orders;
 
-            // Check if the file exists and load existing orders
             if (File.Exists(OrdersFilePath))
             {
                 var existingOrdersJson = File.ReadAllText(OrdersFilePath);
@@ -80,22 +75,87 @@ namespace OrderManagementApp
                 orders = new List<Order>();
             }
 
-            // Add the new order to the list
             orders.Add(order);
 
-            // Serialize the updated list to JSON and save it to the file
             var updatedOrdersJson = JsonSerializer.Serialize(orders, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(OrdersFilePath, updatedOrdersJson);
         }
 
         private void ClearForm()
         {
-            CustomerList.SelectedIndex = -1;
+            CustomerName.Clear();
             OrderAddress.Clear();
             OrderedItem.Clear();
             Amount.Clear();
             OrderDate.SelectedDate = null;
-            OrderStatus.SelectedIndex = -1;
+        }
+
+        private void ExportJson_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON Files (*.json)|*.json",
+                    Title = "Export Orders"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    if (File.Exists(OrdersFilePath))
+                    {
+                        File.Copy(OrdersFilePath, saveFileDialog.FileName, overwrite: true);
+                        MessageBox.Show("Orders exported successfully.", "Export Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No orders to export.", "Export Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ImportJson_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Filter = "JSON Files (*.json)|*.json",
+                    Title = "Import Orders"
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var importedOrdersJson = File.ReadAllText(openFileDialog.FileName);
+                    var importedOrders = JsonSerializer.Deserialize<List<Order>>(importedOrdersJson) ?? new List<Order>();
+
+                    if (File.Exists(OrdersFilePath))
+                    {
+                        var existingOrdersJson = File.ReadAllText(OrdersFilePath);
+                        var existingOrders = JsonSerializer.Deserialize<List<Order>>(existingOrdersJson) ?? new List<Order>();
+
+                        existingOrders.AddRange(importedOrders);
+
+                        var updatedOrdersJson = JsonSerializer.Serialize(existingOrders, new JsonSerializerOptions { WriteIndented = true });
+                        File.WriteAllText(OrdersFilePath, updatedOrdersJson);
+                    }
+                    else
+                    {
+                        File.WriteAllText(OrdersFilePath, importedOrdersJson);
+                    }
+
+                    MessageBox.Show("Orders imported successfully.", "Import Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error importing orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
